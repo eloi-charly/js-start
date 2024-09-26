@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 	<head>
 		<meta charset="utf-8">
 		<title>Les Bonnes Pièces</title>
 		<link rel="stylesheet" href="styles.css">
 		<script type="module" src="pieces.js"></script>
 	</head>
+
 	<body>
 		<header>
 			<img src="images/logo-les-bonnes-pieces.png" alt="LOGO">
@@ -15,11 +17,25 @@
 			<!-- Menu de recherche -->
 			<section class="filtres">
 				<h3>Filtres</h3>
+				<button class="btn-trier">Trier par prix croissant</button>
+				<br>
+				<button class="btn-filtrer">Filtrer les pièces non abordables</button>
+				<br>
+				<button class="btn-trier-desc">Trier par prix decroissant</button>
+				<br>
+				<button class="btn-filter-sans-description">Trier les piéce sans description </button>
 			</section>
 
 			<!-- Fiches produits -->
 			<section class="fiches">
+				<div class="abordable">
+					<p>Piéce abordable</p>
+				</div>
+				<div class="disponible">
+					<p>Pièces disponibles :</p>
+				</div>
 			</section>
 		</main>
 	</body>
+
 </html>
