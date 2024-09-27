@@ -1,11 +1,11 @@
-const reponse = await fetch("pieces-autos.json");
-const piecesAutos = await reponse.json();
+const piecesAutos = await fetch("pieces-autos.json").then((pieces) =>
+  pieces.json()
+);
 
-function afficherFiches(pieces) {
+function genererPieces(pieces) {
   for (let i = 0; i < pieces.length; i++) {
-    const sectionFiche = document.querySelector(".fiches");
     const pieceElement = document.createElement("article");
-
+    const sectionFiches = document.querySelector(".fiches");
     const imageElement = document.createElement("img");
     imageElement.src = pieces[i].image;
 
@@ -35,25 +35,27 @@ function afficherFiches(pieces) {
     pieceElement.appendChild(categorieElement);
     pieceElement.appendChild(descriptionElement);
     pieceElement.appendChild(descriptionElement);
-
-    sectionFiche.appendChild(pieceElement);
+    sectionFiches.appendChild(pieceElement);
   }
 }
 
+genererPieces(piecesAutos);
 //gestion de boutton
 const buttonTrier = document.querySelector(".btn-trier");
 buttonTrier.addEventListener("click", () => {
   const piecesOrdonnees = Array.from(piecesAutos);
   piecesOrdonnees.sort((a, b) => a.prix - b.prix);
-
-  console.log(piecesOrdonnees);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesOrdonnees);
 });
 
 const buttonTrierDesc = document.querySelector(".btn-trier-desc");
 buttonTrierDesc.addEventListener("click", () => {
   const piecesOrdonneesDesc = Array.from(piecesAutos);
   piecesOrdonneesDesc.sort((a, b) => b.prix - a.prix);
-  console.log(piecesOrdonneesDesc);
+
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesOrdonneesDesc);
 });
 
 const buttonFiltrer = document.querySelector(".btn-filtrer");
@@ -62,7 +64,8 @@ buttonFiltrer.addEventListener("click", () => {
     return piece.prix < 35;
   });
 
-  console.log(piecesFiltrer);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesFiltrer);
 });
 
 const buttonFiltrerSansDescription = document.querySelector(
@@ -70,10 +73,10 @@ const buttonFiltrerSansDescription = document.querySelector(
 );
 buttonFiltrerSansDescription.addEventListener("click", () => {
   const pieceFilter = piecesAutos.filter((piece) => piece.description);
-  console.log(pieceFilter);
-});
 
-afficherFiches(piecesAutos);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(pieceFilter);
+});
 
 // Pirece
 const abordableElement = document.querySelector(".abordable");
@@ -97,13 +100,10 @@ for (let i = 0; i < noms.length; i++) {
 abordableElement.appendChild(listeAbordable);
 
 //Piéce disponible
-
 const disponibleElement = document.querySelector(".disponible");
 
 const prixPiece = piecesAutos.map((piece) => piece.prix);
 const nomPiece = piecesAutos.map((piece) => piece.nom);
-
-console.log("nom ", nomPiece);
 
 for (let i = piecesAutos.length - 1; i >= 0; i--) {
   if (piecesAutos[i].disponibilite === false) {
@@ -121,3 +121,15 @@ for (let i = 0; i < nomPiece.length; i++) {
 }
 
 disponibleElement.appendChild(listeDisponible);
+
+//prix maxx
+const prixMax = document.querySelector("#prixMax");
+prixMax.addEventListener("input", () => {
+  document.querySelector("#prixMaxText").innerHTML = prixMax.value;
+  const resultat = piecesAutos.filter((piece) => {
+    return piece.prix >= prixMax.value;
+  });
+  console.log(resultat);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(resultat);
+});
